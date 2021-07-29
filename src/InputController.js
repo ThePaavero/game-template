@@ -10,14 +10,12 @@ const InputController = () => {
   let gamepad
 
   const gamePadButtons = {
-    0: 'a',
-    1: 'b',
-    2: 'x',
-    3: 'y',
-    12: 'up',
-    13: 'down',
-    14: 'left',
-    15: 'right',
+    0: 'z', // A
+    1: 'x', // B
+    12: 'arrowup',
+    13: 'arrowdown',
+    14: 'arrowleft',
+    15: 'arrowright',
   }
 
   const keyHandlerFunctions = {
@@ -58,9 +56,19 @@ const InputController = () => {
 
   const listenToGamepad = () => {
     Object.keys(gamePadButtons).forEach(number => {
-      const key = gamePadButtons[number]
-      if(gamepad.buttons[number] && gamepad.buttons[number].pressed){
-        console.log(number, key)
+      const keyName = gamePadButtons[number]
+      if (!gamepad.buttons[number]) {
+        // state.keysDown = remove(state.keysDown, k => k !== key)
+        return // Not mapped.
+      }
+      if (gamepad.buttons[number].pressed) {
+        if (!state.keysDown.includes(keyName)) {
+          state.keysDown.push(keyName)
+        }
+      } else {
+        if (state.keysDown.includes(keyName)) {
+          state.keysDown = remove(state.keysDown, k => k !== keyName)
+        }
       }
     })
     window.requestAnimationFrame(listenToGamepad)
