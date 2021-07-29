@@ -3,12 +3,12 @@ import config from './config'
 import State from './state'
 import StateMutator from './StateMutator'
 import Renderer from './Renderer'
-import _ from 'lodash'
+import InputController from './InputController'
+import { cloneDeep } from 'lodash'
 
 let state
 
-const initialState = _.cloneDeep(State)
-
+const initialState = cloneDeep(State)
 const deltaFrame = new Deltaframe()
 
 let canvas, context, debugPreElement
@@ -21,51 +21,8 @@ const tick = () => {
   }
 }
 
-const placePlayerToInitialPosition = () => {
-  const player = state.player
-  player.x = (canvas.width / 2) - (canvas.width / 5)
-  player.y = canvas.height - player.height
-}
-
-const keyHandlerFunctions = {
-  onKeyDown: (e) => {
-    const key = e.key.toLowerCase()
-    if (!state.keysDown.includes(key)) {
-      state.keysDown.push(key)
-    }
-  },
-  onKeyUp: (e) => {
-    const key = e.key.toLowerCase()
-    if (state.keysDown.includes(key)) {
-      state.keysDown = state.keysDown.filter(key => key !== key)
-    }
-
-    switch (key) {
-      case 'p':
-        if (deltaFrame.isPaused) {
-          deltaFrame.resume()
-        } else {
-          deltaFrame.pause()
-        }
-        break
-      case 'r':
-        init(config.width, config.height)
-        break
-    }
-  },
-}
-
-const setControls = () => {
-  const eventSlugs = ['KeyDown', 'KeyUp']
-  eventSlugs.forEach(slug => {
-    const method = keyHandlerFunctions[`on${slug}`]
-    document.removeEventListener(slug.toLowerCase(), method)
-    document.addEventListener(slug.toLowerCase(), method)
-  })
-}
-
 const init = (width, height) => {
-  state = _.cloneDeep(initialState)
+  state = cloneDeep(initialState)
 
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
@@ -74,8 +31,8 @@ const init = (width, height) => {
   canvas.width = width
   canvas.height = height
 
-  setControls()
-  placePlayerToInitialPosition()
+  StateMutator.playerToInitialPosition(state, canvas)
+  InputController.init(state, config, deltaFrame)
 
   if (!deltaFrame.isRunning) {
     deltaFrame.start(tick)

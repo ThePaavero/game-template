@@ -24,8 +24,15 @@ const StateMutator = () => {
     }
   }
 
+  const playerToInitialPosition = (state, canvas) => {
+    const player = state.player
+    player.x = (canvas.width / 2) - (canvas.width / 5)
+    player.y = canvas.height - player.height
+  }
+
   return {
     update,
+    playerToInitialPosition,
   }
 }
 
