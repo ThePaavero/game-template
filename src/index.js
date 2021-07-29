@@ -1,5 +1,8 @@
-const config = require('./config')
-const state = require('./state')
+import Deltaframe from 'deltaframe'
+import config from './config'
+import state from './state'
+
+const deltaFrame = new Deltaframe()
 
 let canvas, context, debugPreElement
 
@@ -13,6 +16,17 @@ const updateState = () => {
   }
   player.x += player.velocities.x
   player.y += player.velocities.y
+
+  if (player.velocities.x > 0) {
+    player.velocities.x -= player.mass
+  }
+  else if (player.velocities.x < 0) {
+    player.velocities.x += player.mass
+  }
+
+  if (Math.abs(player.velocities.x) < 0.1) {
+    player.velocities.x = 0
+  }
 }
 
 const draw = () => {
@@ -25,7 +39,6 @@ const draw = () => {
 const tick = () => {
   updateState()
   draw()
-  window.requestAnimationFrame(tick)
   debugPreElement.innerHTML = JSON.stringify(state, null, 2)
 }
 
@@ -57,7 +70,7 @@ const init = (width, height) => {
 
   setControls()
   placePlayerToInitialPosition()
-  tick()
+  deltaFrame.start(tick)
 }
 
 init(config.width, config.height)
