@@ -8,6 +8,7 @@ const InputController = () => {
   let resetGame
 
   let gamepad
+  let shouldListenToGamepad = false
 
   const gamePadButtons = {
     0: 'z', // A
@@ -20,12 +21,15 @@ const InputController = () => {
 
   const keyHandlerFunctions = {
     keyDown: (e) => {
+      shouldListenToGamepad = false
       const key = e.key.toLowerCase()
       if (!state.keysDown.includes(key)) {
         state.keysDown.push(key)
       }
+
     },
     keyUp: (e) => {
+      shouldListenToGamepad = true
       const key = e.key.toLowerCase()
       state.keysDown = remove(state.keysDown, k => k !== key) // This is faster and more reliable than using filter. Weird.
 
@@ -47,19 +51,26 @@ const InputController = () => {
     focus: () => {
       state.keysDown = []
       deltaFrame.resume()
+      shouldListenToGamepad = !!gamepad
     },
     gamepadconnected: e => {
       gamepad = e.gamepad
+      shouldListenToGamepad = true
       listenToGamepad()
     },
   }
 
   const listenToGamepad = () => {
+    if (!shouldListenToGamepad) {
+      setTimeout(() => {
+        window.requestAnimationFrame(listenToGamepad)
+      }, 1000)
+      return
+    }
     Object.keys(gamePadButtons).forEach(number => {
       const keyName = gamePadButtons[number]
       if (!gamepad.buttons[number]) {
-        // state.keysDown = remove(state.keysDown, k => k !== key)
-        return // Not mapped.
+        return
       }
       if (gamepad.buttons[number].pressed) {
         if (!state.keysDown.includes(keyName)) {
@@ -75,7 +86,7 @@ const InputController = () => {
   }
 
   const setEventListeners = () => {
-    const eventSlugs = ['keyDown', 'keyUp', 'focus', 'blur', 'gamepadconnected']
+    const eventSlugs = ['keyDown', 'keyUp', 'focus', 'blur', 'gamepadconnected', 'gamepaddisconnected']
     eventSlugs.forEach(slug => {
       const method = keyHandlerFunctions[slug]
       window.removeEventListener(slug.toLowerCase(), method)
