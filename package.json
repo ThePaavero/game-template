@@ -1,0 +1,26 @@
+{
+  "name": "game-name",
+  "version": "1.0.0",
+  "description": "...",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm-run-all --parallel dev:server",
+    "dev:server": "webpack serve --mode=development --hot --inline",
+    "watch": "webpack -w -d",
+    "build": "webpack -p"
+  },
+  "keywords": [
+    "es6"
+  ],
+  "author": "ThePaavero",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "7.14.8",
+    "@babel/preset-env": "7.14.8",
+    "babel-loader": "8.2.2",
+    "npm-run-all": "4.1.5",
+    "webpack": "5.47.0",
+    "webpack-cli": "4.7.2",
+    "webpack-dev-server": "3.11.2"
+  }
+}
