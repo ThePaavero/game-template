@@ -1,6 +1,11 @@
 import Deltaframe from 'deltaframe'
 import config from './config'
-import state from './state'
+import State from './state'
+import _ from 'lodash'
+
+let state
+
+const initialState = _.cloneDeep(State)
 
 const deltaFrame = new Deltaframe()
 
@@ -48,20 +53,45 @@ const placePlayerToInitialPosition = () => {
   player.y = canvas.height - player.height
 }
 
+const keyHandlerFunctions = {
+  onKeyDown: (e) => {
+    const key = e.key.toLowerCase()
+    if (!state.keysDown.includes(key)) {
+      state.keysDown.push(key)
+    }
+  },
+  onKeyUp: (e) => {
+    const key = e.key.toLowerCase()
+    if (state.keysDown.includes(key)) {
+      state.keysDown = state.keysDown.filter(key => key !== key)
+    }
+
+    switch (key) {
+      case 'p':
+        if (deltaFrame.isPaused) {
+          deltaFrame.resume()
+        } else {
+          deltaFrame.pause()
+        }
+        break
+      case 'r':
+        init(config.width, config.height)
+        break
+    }
+  },
+}
+
 const setControls = () => {
-  document.addEventListener('keydown', e => {
-    if (!state.keysDown.includes(e.key.toLowerCase())) {
-      state.keysDown.push(e.key.toLowerCase())
-    }
-  })
-  document.addEventListener('keyup', e => {
-    if (state.keysDown.includes(e.key.toLowerCase())) {
-      state.keysDown = state.keysDown.filter(key => key !== e.key.toLowerCase())
-    }
+  const eventSlugs = ['KeyDown', 'KeyUp']
+  eventSlugs.forEach(slug => {
+    const method = keyHandlerFunctions[`on${slug}`]
+    document.removeEventListener(slug.toLowerCase(), method)
+    document.addEventListener(slug.toLowerCase(), method)
   })
 }
 
 const init = (width, height) => {
+  state = _.cloneDeep(initialState)
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
   debugPreElement = document.querySelector('pre')
@@ -70,7 +100,9 @@ const init = (width, height) => {
 
   setControls()
   placePlayerToInitialPosition()
-  deltaFrame.start(tick)
+  if (!deltaFrame.isRunning) {
+    deltaFrame.start(tick)
+  }
 }
 
 init(config.width, config.height)

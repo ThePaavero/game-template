@@ -24,6 +24,7 @@
     "webpack-dev-server": "3.11.2"
   },
   "dependencies": {
-    "deltaframe": "^2.0.4"
+    "deltaframe": "^2.0.4",
+    "lodash": "^4.17.21"
   }
 }
