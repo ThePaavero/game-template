@@ -1,16 +1,5 @@
 const StateMutator = () => {
 
-  const keepInsideCanvas = (player, canvas) => {
-    if (player.x < 0) {
-      player.x = 0
-      player.velocities.x = Math.abs(player.velocities.x) * player.mass
-    }
-    else if (player.x > canvas.width - player.width) {
-      player.x = canvas.width - player.width
-      player.velocities.x = (player.velocities.x * -1) * player.mass
-    }
-  }
-
   const update = (state, canvas) => {
     const player = state.player
     const keysDown = state.keysDown
@@ -42,7 +31,16 @@ const StateMutator = () => {
         player.velocities[axis] = 0
       }
 
-      keepInsideCanvas(player, canvas)
+      const dimension = axis === 'x' ? 'width' : 'height'
+
+      if (player[axis] < 0) {
+        player[axis] = 0
+        player.velocities[axis] = Math.abs(player.velocities[axis]) * player.mass
+      }
+      else if (player[axis] > canvas[dimension] - player[dimension]) {
+        player[axis] = canvas[dimension] - player[dimension]
+        player.velocities[axis] = (player.velocities[axis] * -1) * player.mass
+      }
     })
   }
 
