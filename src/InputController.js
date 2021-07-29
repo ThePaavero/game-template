@@ -1,3 +1,5 @@
+import { remove } from 'lodash'
+
 const InputController = () => {
 
   let state
@@ -14,23 +16,19 @@ const InputController = () => {
     },
     onKeyUp: (e) => {
       const key = e.key.toLowerCase()
-      if (state.keysDown.includes(key)) {
-        state.keysDown = state.keysDown.filter(key => key !== key)
-      }
+      state.keysDown = remove(state.keysDown, k => k !== key) // This is faster and more reliable than using filter. Weird.
 
-      switch (key) {
-        case 'p':
-          if (deltaFrame.isPaused) {
-            deltaFrame.resume()
-          } else {
-            deltaFrame.pause()
-          }
-          break
-        case 'r':
-          resetGame(config.width, config.height)
-          break
+      if (key === 'p') {
+        if (deltaFrame.isPaused) {
+          deltaFrame.resume()
+        } else {
+          deltaFrame.pause()
+        }
       }
-    },
+      else if (key === 'r') {
+        resetGame(config.width, config.height)
+      }
+    }
   }
 
   const setControls = () => {
