@@ -1,4 +1,3 @@
-const { width } = require('./config')
 const config = require('./config')
 const state = require('./state')
 
@@ -7,28 +6,13 @@ let canvas, context, debugPreElement
 const updateState = () => {
   const player = state.player
   if (state.keysDown.includes('arrowleft')) {
-    player.velocities.x = -1
+    player.velocities.x--
   }
-
   if (state.keysDown.includes('arrowright')) {
-    player.velocities.x = 1
+    player.velocities.x++
   }
-
-  // Apply forces.
-  player.y += Math.round(player.velocities.y)
-  player.x += Math.round(player.velocities.x)
-
-  // Apply friction
-  if (player.velocities.x < 0) {
-    player.velocities.x += player.friction
-  } else if (player.velocities.x > 0) {
-    player.velocities.x -= player.friction
-  }
-
-  // Don't slide around forever.
-  if (Math.abs(player.velocities.x) > 0) {
-    player.velocities.x = 0
-  }
+  player.x += player.velocities.x
+  player.y += player.velocities.y
 }
 
 const draw = () => {
