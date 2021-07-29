@@ -26,7 +26,6 @@ const InputController = () => {
       if (!state.keysDown.includes(key)) {
         state.keysDown.push(key)
       }
-
     },
     keyUp: (e) => {
       shouldListenToGamepad = true
@@ -58,6 +57,10 @@ const InputController = () => {
       shouldListenToGamepad = true
       listenToGamepad()
     },
+    gamepaddisconnected: () => {
+      gamepad = null
+      shouldListenToGamepad = false
+    }
   }
 
   const listenToGamepad = () => {
@@ -69,7 +72,7 @@ const InputController = () => {
     }
     Object.keys(gamePadButtons).forEach(number => {
       const keyName = gamePadButtons[number]
-      if (!gamepad.buttons[number]) {
+      if (!gamepad || !gamepad.buttons[number]) {
         return
       }
       if (gamepad.buttons[number].pressed) {
