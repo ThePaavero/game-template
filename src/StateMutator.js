@@ -3,25 +3,34 @@ const StateMutator = () => {
   const update = (state) => {
     const player = state.player
     const keysDown = state.keysDown
+
     if (keysDown.includes('arrowleft')) {
       player.velocities.x--
     }
     if (keysDown.includes('arrowright')) {
       player.velocities.x++
     }
-    player.x += player.velocities.x
-    player.y += player.velocities.y
-
-    if (player.velocities.x > 0) {
-      player.velocities.x -= player.mass
+    if (keysDown.includes('arrowup')) {
+      player.velocities.y--
     }
-    else if (player.velocities.x < 0) {
-      player.velocities.x += player.mass
+    if (keysDown.includes('arrowdown')) {
+      player.velocities.y++
     }
 
-    if (Math.abs(player.velocities.x) < 0.1) {
-      player.velocities.x = 0
-    }
+    ['x', 'y'].forEach(axis => {
+      player[axis] += player.velocities[axis]
+
+      if (player.velocities[axis] > 0) {
+        player.velocities[axis] -= player.mass
+      }
+      else if (player.velocities[axis] < 0) {
+        player.velocities[axis] += player.mass
+      }
+
+      if (Math.abs(player.velocities[axis]) < 0.5) {
+        player.velocities[axis] = 0
+      }
+    })
   }
 
   const playerToInitialPosition = (state, canvas) => {
