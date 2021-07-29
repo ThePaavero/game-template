@@ -8,6 +8,10 @@ const state = {
     velocities: {
       x: 0,
       y: 0,
+      ceilings: {
+        x: 25,
+        y: 25,
+      },
     },
     mass: 0.3,
   },

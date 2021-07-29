@@ -5,16 +5,24 @@ const StateMutator = () => {
     const keysDown = state.keysDown
 
     if (keysDown.includes('arrowleft')) {
-      player.velocities.x--
+      if (Math.abs(player.velocities.x) < player.velocities.ceilings.x) {
+        player.velocities.x--
+      }
     }
     if (keysDown.includes('arrowright')) {
-      player.velocities.x++
+      if (Math.abs(player.velocities.x) < player.velocities.ceilings.x) {
+        player.velocities.x++
+      }
     }
     if (keysDown.includes('arrowup')) {
-      player.velocities.y--
+      if (Math.abs(player.velocities.y) < player.velocities.ceilings.y) {
+        player.velocities.y--
+      }
     }
     if (keysDown.includes('arrowdown')) {
-      player.velocities.y++
+      if (Math.abs(player.velocities.y) < player.velocities.ceilings.y) {
+        player.velocities.y++
+      }
     }
 
     ['x', 'y'].forEach(axis => {
