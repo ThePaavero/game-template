@@ -39,7 +39,7 @@ const InputController = () => {
     },
   }
 
-  const setControls = () => {
+  const setEventListeners = () => {
     const eventSlugs = ['KeyDown', 'KeyUp', 'Focus', 'Blur']
     eventSlugs.forEach(slug => {
       const method = keyHandlerFunctions[`on${slug}`]
@@ -53,7 +53,7 @@ const InputController = () => {
     config = _config
     deltaFrame = _deltaFrame
     resetGame = _resetGame
-    setControls()
+    setEventListeners()
   }
 
   return {
