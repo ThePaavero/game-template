@@ -28,11 +28,19 @@ const InputController = () => {
       else if (key === 'r') {
         resetGame(config.width, config.height)
       }
-    }
+    },
+    onBlur: () => {
+      state.keysDown = []
+      deltaFrame.pause()
+    },
+    onFocus: () => {
+      state.keysDown = []
+      deltaFrame.resume()
+    },
   }
 
   const setControls = () => {
-    const eventSlugs = ['KeyDown', 'KeyUp']
+    const eventSlugs = ['KeyDown', 'KeyUp', 'Focus', 'Blur']
     eventSlugs.forEach(slug => {
       const method = keyHandlerFunctions[`on${slug}`]
       document.removeEventListener(slug.toLowerCase(), method)
