@@ -7,14 +7,27 @@ const InputController = () => {
   let deltaFrame
   let resetGame
 
+  let gamepad
+
+  const gamePadButtons = {
+    0: 'a',
+    1: 'b',
+    2: 'x',
+    3: 'y',
+    12: 'up',
+    13: 'down',
+    14: 'left',
+    15: 'right',
+  }
+
   const keyHandlerFunctions = {
-    onKeyDown: (e) => {
+    keyDown: (e) => {
       const key = e.key.toLowerCase()
       if (!state.keysDown.includes(key)) {
         state.keysDown.push(key)
       }
     },
-    onKeyUp: (e) => {
+    keyUp: (e) => {
       const key = e.key.toLowerCase()
       state.keysDown = remove(state.keysDown, k => k !== key) // This is faster and more reliable than using filter. Weird.
 
@@ -29,22 +42,36 @@ const InputController = () => {
         resetGame(config.width, config.height)
       }
     },
-    onBlur: () => {
+    blur: () => {
       state.keysDown = []
       deltaFrame.pause()
     },
-    onFocus: () => {
+    focus: () => {
       state.keysDown = []
       deltaFrame.resume()
     },
+    gamepadconnected: e => {
+      gamepad = e.gamepad
+      listenToGamepad()
+    },
+  }
+
+  const listenToGamepad = () => {
+    Object.keys(gamePadButtons).forEach(number => {
+      const key = gamePadButtons[number]
+      if(gamepad.buttons[number] && gamepad.buttons[number].pressed){
+        console.log(number, key)
+      }
+    })
+    window.requestAnimationFrame(listenToGamepad)
   }
 
   const setEventListeners = () => {
-    const eventSlugs = ['KeyDown', 'KeyUp', 'Focus', 'Blur']
+    const eventSlugs = ['keyDown', 'keyUp', 'focus', 'blur', 'gamepadconnected']
     eventSlugs.forEach(slug => {
-      const method = keyHandlerFunctions[`on${slug}`]
-      document.removeEventListener(slug.toLowerCase(), method)
-      document.addEventListener(slug.toLowerCase(), method)
+      const method = keyHandlerFunctions[slug]
+      window.removeEventListener(slug.toLowerCase(), method)
+      window.addEventListener(slug.toLowerCase(), method)
     })
   }
 
