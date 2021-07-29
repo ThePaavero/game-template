@@ -3,6 +3,7 @@ const InputController = () => {
   let state
   let config
   let deltaFrame
+  let resetGame
 
   const keyHandlerFunctions = {
     onKeyDown: (e) => {
@@ -26,7 +27,7 @@ const InputController = () => {
           }
           break
         case 'r':
-          init(config.width, config.height)
+          resetGame(config.width, config.height)
           break
       }
     },
@@ -41,10 +42,11 @@ const InputController = () => {
     })
   }
 
-  const init = (_state, _config, _deltaFrame) => {
+  const init = (_state, _config, _deltaFrame, _resetGame) => {
     state = _state
     config = _config
     deltaFrame = _deltaFrame
+    resetGame = _resetGame
     setControls()
   }
 

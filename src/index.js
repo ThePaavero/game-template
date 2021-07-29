@@ -32,7 +32,7 @@ const init = (width, height) => {
   canvas.height = height
 
   StateMutator.playerToInitialPosition(state, canvas)
-  InputController.init(state, config, deltaFrame)
+  InputController.init(state, config, deltaFrame, init)
 
   if (!deltaFrame.isRunning) {
     deltaFrame.start(tick)
