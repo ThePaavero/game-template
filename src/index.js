@@ -14,7 +14,7 @@ const deltaFrame = new Deltaframe()
 let canvas, context, debugPreElement
 
 const tick = () => {
-  StateMutator.update(state)
+  StateMutator.update(state, canvas)
   Renderer.draw(state, context, canvas)
   if (config.debugger && debugPreElement) {
     debugPreElement.innerHTML = JSON.stringify(state, null, 2)
