@@ -1,6 +1,8 @@
 import Deltaframe from 'deltaframe'
 import config from './config'
 import State from './state'
+import StateMutator from './StateMutator'
+import Renderer from './Renderer'
 import _ from 'lodash'
 
 let state
@@ -11,40 +13,12 @@ const deltaFrame = new Deltaframe()
 
 let canvas, context, debugPreElement
 
-const updateState = () => {
-  const player = state.player
-  if (state.keysDown.includes('arrowleft')) {
-    player.velocities.x--
-  }
-  if (state.keysDown.includes('arrowright')) {
-    player.velocities.x++
-  }
-  player.x += player.velocities.x
-  player.y += player.velocities.y
-
-  if (player.velocities.x > 0) {
-    player.velocities.x -= player.mass
-  }
-  else if (player.velocities.x < 0) {
-    player.velocities.x += player.mass
-  }
-
-  if (Math.abs(player.velocities.x) < 0.1) {
-    player.velocities.x = 0
-  }
-}
-
-const draw = () => {
-  context.clearRect(0, 0, canvas.width, canvas.height)
-  const player = state.player
-  context.fillStyle = player.color
-  context.fillRect(player.x, player.y, player.width, player.height)
-}
-
 const tick = () => {
-  updateState()
-  draw()
-  debugPreElement.innerHTML = JSON.stringify(state, null, 2)
+  StateMutator.update(state)
+  Renderer.draw(state, context, canvas)
+  if (config.debugger && debugPreElement) {
+    debugPreElement.innerHTML = JSON.stringify(state, null, 2)
+  }
 }
 
 const placePlayerToInitialPosition = () => {
@@ -92,14 +66,17 @@ const setControls = () => {
 
 const init = (width, height) => {
   state = _.cloneDeep(initialState)
+
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
   debugPreElement = document.querySelector('pre')
+
   canvas.width = width
   canvas.height = height
 
   setControls()
   placePlayerToInitialPosition()
+
   if (!deltaFrame.isRunning) {
     deltaFrame.start(tick)
   }
