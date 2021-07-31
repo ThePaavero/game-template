@@ -30,7 +30,7 @@ const updateDebugView = () => {
 const init = async (width, height) => {
 
   if (config.images.length) {
-    console.info('Preloading images...')
+    console.info(`Preloading ${config.images.length} images...`)
     await Renderer.preload(config.images)
     console.info('Preloading images done.')
   }
