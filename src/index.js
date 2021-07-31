@@ -5,7 +5,7 @@ import State from './state'
 import StateMutator from './StateMutator'
 import Renderer from './Renderer'
 import InputController from './InputController'
-import { cloneDeep, update } from 'lodash'
+import { cloneDeep } from 'lodash'
 
 let state
 
