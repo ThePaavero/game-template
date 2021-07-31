@@ -12,7 +12,7 @@ let state
 const initialState = cloneDeep(State)
 const deltaFrame = new Deltaframe()
 
-let canvas, context, debugPreElement
+let canvas, context, debugPreElement, preloadMessageElement
 
 const tick = () => {
   StateMutator.update(state, canvas)
@@ -35,6 +35,8 @@ const init = async (width, height) => {
   canvas = document.querySelector('canvas')
   context = canvas.getContext('2d')
   debugPreElement = document.querySelector('pre')
+  preloadMessageElement = document.querySelector('.preload-message')
+  preloadMessageElement.remove()
 
   canvas.width = width
   canvas.height = height

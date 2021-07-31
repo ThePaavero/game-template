@@ -24,10 +24,24 @@
     pre:hover {
       opacity: 1;
     }
+
+    .preload-message {
+      position: absolute;
+      top: 2vh;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      color: rgb(80, 80, 80);
+      margin: auto;
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 2vw;
+    }
   </style>
 </head>
 
 <body>
+  <div class="preload-message">Loading images, hold on...</div>
   <canvas></canvas>
   <pre></pre>
   <script type="text/javascript" src="dist/bundle.js"></script>
