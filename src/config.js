@@ -3,6 +3,7 @@ const config = {
   height: 1080,
   debugger: true,
   // debugger: false,
+  images: [],
 }
 
-module.exports = config
+export default config

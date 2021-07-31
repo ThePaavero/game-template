@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import Deltaframe from 'deltaframe'
 import config from './config'
 import State from './state'
@@ -21,7 +22,14 @@ const tick = () => {
   }
 }
 
-const init = (width, height) => {
+const init = async (width, height) => {
+
+  if (config.images.length) {
+    console.info('Preloading images...')
+    await Renderer.preload(config.images)
+    console.info('Preloading images done.')
+  }
+
   state = cloneDeep(initialState)
 
   canvas = document.querySelector('canvas')

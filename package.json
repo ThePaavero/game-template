@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all --parallel dev:server",
-    "dev:server": "webpack serve --mode=development --hot --inline",
+    "dev:server": "webpack serve --port=4200 --mode=development --hot --inline",
     "watch": "webpack -w -d",
     "build": "webpack -p"
   },

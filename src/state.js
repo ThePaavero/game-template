@@ -18,4 +18,4 @@ const state = {
   keysDown: [],
 }
 
-module.exports = state
+export default state
