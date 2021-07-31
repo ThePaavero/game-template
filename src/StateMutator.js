@@ -58,9 +58,13 @@ const StateMutator = () => {
     player.y = (canvas.height / 2) - (player.height / 2)
   }
 
+  const onLoad = (state, canvas) => {
+    playerToInitialPosition(state, canvas)
+  }
+
   return {
     update,
-    playerToInitialPosition,
+    onLoad,
   }
 }
 
