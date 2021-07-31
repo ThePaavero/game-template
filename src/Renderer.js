@@ -7,7 +7,6 @@ const Renderer = () => {
       slugArray.forEach(slug => {
         const el = new Image()
         el.src = require(`./assets/images/${slug}.png`)
-        console.log(el.src)
         el.onload = () => {
           images.push({
             slug,
