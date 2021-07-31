@@ -5,7 +5,7 @@ import State from './state'
 import StateMutator from './StateMutator'
 import Renderer from './Renderer'
 import InputController from './InputController'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, update } from 'lodash'
 
 let state
 
@@ -17,9 +17,14 @@ let canvas, context, debugPreElement, preloadMessageElement
 const tick = () => {
   StateMutator.update(state, canvas)
   Renderer.draw(state, context, canvas)
-  if (config.debugger && debugPreElement) {
-    debugPreElement.innerHTML = JSON.stringify(state, null, 2)
+  updateDebugView()
+}
+
+const updateDebugView = () => {
+  if (!config.debugger || !debugPreElement) {
+    return
   }
+  debugPreElement.innerHTML = JSON.stringify(state, null, 2)
 }
 
 const init = async (width, height) => {
